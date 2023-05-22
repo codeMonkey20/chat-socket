@@ -36,13 +36,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv = __importStar(require("dotenv"));
-const http = __importStar(require("http"));
+const https = __importStar(require("https"));
+const fs = __importStar(require("fs"));
 const socket_io_1 = require("socket.io");
 const User_1 = __importDefault(require("./models/User"));
 dotenv.config();
 const port = process.env.PORT;
-const httpServer = http.createServer();
-const io = new socket_io_1.Server(httpServer, {
+const httpsServer = https.createServer({
+    key: fs.readFileSync("key.pem", "utf-8"),
+    cert: fs.readFileSync("cert.pem", "utf-8"),
+});
+const io = new socket_io_1.Server(httpsServer, {
     cors: {
         origin: "*",
     },
@@ -87,6 +91,6 @@ io.on("connection", (socket) => __awaiter(void 0, void 0, void 0, function* () {
         io.emit("online");
     }));
 }));
-httpServer.listen(port, () => {
-    console.log(`⚡️[SocketIO]: SocketIO is running at ws://localhost:${port}`);
+httpsServer.listen(port, () => {
+    console.log(`⚡️[SocketIO]: SocketIO is running at wss://localhost:${port}`);
 });
