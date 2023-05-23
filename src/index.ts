@@ -1,18 +1,14 @@
 import * as dotenv from "dotenv";
-import * as https from "https";
-import * as fs from "fs";
+import * as http from "http";
 import { Server, Socket } from "socket.io";
 import User from "./models/User";
 
 dotenv.config();
 const port = process.env.PORT;
-const httpsServer = https.createServer({
-  key: fs.readFileSync("key.pem", "utf-8"),
-  cert: fs.readFileSync("cert.pem", "utf-8"),
-});
-const io = new Server(httpsServer, {
+const httpServer = http.createServer();
+const io = new Server(httpServer, {
   cors: {
-    origin: "*",
+    origin: ["http://localhost:3000", "https://messenger-clone-juliardactub.vercel.app"],
   },
 });
 
@@ -69,6 +65,6 @@ io.on("connection", async (socket: SocketWithUsername) => {
   });
 });
 
-httpsServer.listen(port, () => {
+httpServer.listen(port, () => {
   console.log(`⚡️[SocketIO]: SocketIO is running at wss://localhost:${port}`);
 });
