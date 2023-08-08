@@ -8,7 +8,7 @@ const port = process.env.PORT;
 const httpServer = http.createServer();
 const io = new Server(httpServer, {
   cors: {
-    origin: ["http://localhost:3000", "juliardchat.vercel.app"],
+    origin: ["http://localhost:3000", "https://juliardchat.vercel.app"],
   },
 });
 
